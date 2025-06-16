@@ -49,6 +49,20 @@
       color: #fff;
     }
 
+    th input {
+      width: 90%;
+      font-size: 1.2rem;
+      background: transparent;
+      border: none;
+      color: #98fb98;
+      text-align: center;
+    }
+
+    th input:focus {
+      outline: none;
+      background: rgba(255, 255, 255, 0.05);
+    }
+
     th {
       background: #333;
       color: #98fb98;
@@ -89,10 +103,10 @@
     <table>
       <thead>
         <tr>
-          <th>Player 1</th>
-          <th>Player 2</th>
-          <th>Player 3</th>
-          <th>Player 4</th>
+          <th><input type="text" value="Player 1" /></th>
+          <th><input type="text" value="Player 2" /></th>
+          <th><input type="text" value="Player 3" /></th>
+          <th><input type="text" value="Player 4" /></th>
         </tr>
       </thead>
       <tbody id="scoreTable">
