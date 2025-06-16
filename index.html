@@ -69,12 +69,15 @@
       font-size: 1.4rem;
     }
 
-    td.score-cell {
-      cursor: pointer;
+    td.label-cell {
+      background-color: #1a1a1a;
+      color: #98fb98;
+      font-weight: bold;
+      text-align: right;
     }
 
-    td.score-cell::before {
-      content: "";
+    td.score-cell {
+      cursor: pointer;
     }
 
     .footer-buttons {
@@ -103,6 +106,7 @@
     <table>
       <thead>
         <tr>
+          <th></th>
           <th><input type="text" value="Player 1" /></th>
           <th><input type="text" value="Player 2" /></th>
           <th><input type="text" value="Player 3" /></th>
@@ -125,6 +129,11 @@
 
     function createRow(label) {
       const tr = document.createElement("tr");
+      const labelTd = document.createElement("td");
+      labelTd.classList.add("label-cell");
+      labelTd.textContent = label;
+      tr.appendChild(labelTd);
+
       for (let i = 0; i < 4; i++) {
         const td = document.createElement("td");
         td.classList.add("score-cell");
