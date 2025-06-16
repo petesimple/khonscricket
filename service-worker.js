@@ -6,9 +6,23 @@ self.addEventListener('install', event => {
         './index.html',
         './manifest.json',
         './flyingpiglogo.png',
-        './chalk-icon.png'
+        './chalk-icon.png',
+        './icon-192.png',
+        './icon-512.png'
       ]);
     })
+  );
+});
+
+self.addEventListener('activate', event => {
+  event.waitUntil(
+    caches.keys().then(keys =>
+      Promise.all(keys.map(key => {
+        if (key !== 'khons-cricket-cache-v1') {
+          return caches.delete(key);
+        }
+      }))
+    )
   );
 });
 
