@@ -7,6 +7,7 @@
   <link rel="manifest" href="manifest.json" />
   <meta name="theme-color" content="#111" />
   <link rel="icon" href="chalk-icon.png" type="image/png">
+  <link rel="apple-touch-icon" href="flyingpiglogo.png">
   <style>
     body {
       margin: 0;
@@ -179,6 +180,13 @@
     }
 
     populateBoard();
+
+    // Register service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(reg => console.log('Service Worker Registered'))
+        .catch(err => console.warn('Service Worker Failed', err));
+    }
   </script>
 </body>
 </html>
