@@ -20,19 +20,20 @@
 
     header {
       background: #000;
-      padding: 1rem;
-      font-size: 2rem;
+      padding: 2rem;
       border-bottom: 2px solid #444;
-      color: #fff;
-      font-family: 'Fredericka the Great', cursive;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
+    }
+
+    .logo-wrapper {
+      display: inline-block;
+      padding: 1rem;
+      border: 4px dashed #fff;
+      border-radius: 16px;
+      box-shadow: 0 0 10px #fff2, 0 0 5px #fff1;
     }
 
     header img {
-      height: 40px;
+      height: 120px;
     }
 
     .chalkboard {
@@ -111,8 +112,9 @@
 </head>
 <body>
   <header>
-    <span>Khon's Cricket</span>
-    <img src="flyingpiglogo.png" alt="Flying Pig Logo">
+    <div class="logo-wrapper">
+      <img src="flyingpiglogo.png" alt="Flying Pig Logo">
+    </div>
   </header>
   <div class="chalkboard">
     <table>
