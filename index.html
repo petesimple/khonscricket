@@ -129,7 +129,7 @@
       </tbody>
     </table>
     <div class="footer-buttons">
-      <button onclick="resetGame()">New Game</button>
+      <button onclick="confirmReset()">New Game</button>
     </div>
   </div>
 
@@ -169,6 +169,13 @@
 
     function resetGame() {
       populateBoard();
+    }
+
+    function confirmReset() {
+      const confirmed = confirm("Do you really want to start a new game? This will clear all scores.");
+      if (confirmed) {
+        resetGame();
+      }
     }
 
     populateBoard();
