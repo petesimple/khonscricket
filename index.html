@@ -113,7 +113,10 @@
 <body>
   <header>
     <div class="logo-wrapper">
-      <img src="flyingpiglogo.png" alt="Flying Pig Logo">
+      <div id="logoContainer" onclick="toggleQR()" style="position: relative; display: inline-block;">
+  <img id="logoImage" src="./flyingpiglogo.png" alt="Khons Cricket Logo" class="logo">
+  <div id="qrOverlay" style="display:none; position:absolute; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.6); color: #fff; font-size: 2em; font-weight: bold; justify-content: center; align-items: center;">Share</div>
+      </div>
     </div>
   </header>
   <div class="chalkboard">
@@ -189,6 +192,25 @@
         .then(reg => console.log('Service Worker Registered'))
         .catch(err => console.warn('Service Worker Failed', err));
     }
+
+    let showingQR = false;
+    
+    function toggleQR() {
+  const logo = document.getElementById('logoImage');
+  const overlay = document.getElementById('qrOverlay');
+
+  if (!showingQR) {
+    logo.src = './khonscricket-qr.png';
+    overlay.style.display = 'flex'; // only show overlay on QR reveal
+    setTimeout(() => {
+      overlay.style.display = 'none';
+    }, 3000);
+  } else {
+    logo.src = './flyingpiglogo.png';
+    overlay.style.display = 'none'; // ensure overlay stays hidden when toggling back
+  }
+  showingQR = !showingQR;
+}
   </script>
 </body>
 </html>
