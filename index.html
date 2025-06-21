@@ -134,83 +134,119 @@
         <!-- Rows will be injected by JS -->
       </tbody>
     </table>
+    <div id="scores" style="margin-top: 1rem;">
+  <strong>Scores:</strong>
+  <span id="score0">P1: 0</span> |
+  <span id="score1">P2: 0</span> |
+  <span id="score2">P3: 0</span> |
+  <span id="score3">P4: 0</span>
+</div>
     <div class="footer-buttons">
       <button onclick="confirmReset()">New Game</button>
     </div>
   </div>
 
   <script>
-    const rows = ["20", "19", "18", "17", "16", "15", "Bull"];
-    const scoreTable = document.getElementById("scoreTable");
-    const symbols = ["", "/", "X", "O"];
+  const rows = ["20", "19", "18", "17", "16", "15", "Bull"];
+  const scoreTable = document.getElementById("scoreTable");
+  const symbols = ["", "/", "X", "O"];
+  let playerScores = [0, 0, 0, 0]; // tracks each player's score
 
-    function createRow(label) {
-      const tr = document.createElement("tr");
-      const labelTd = document.createElement("td");
-      labelTd.classList.add("label-cell");
-      labelTd.textContent = label;
-      tr.appendChild(labelTd);
+  function createRow(label) {
+    const tr = document.createElement("tr");
+    const labelTd = document.createElement("td");
+    labelTd.classList.add("label-cell");
+    labelTd.textContent = label;
+    tr.appendChild(labelTd);
 
-      for (let i = 0; i < 4; i++) {
-        const td = document.createElement("td");
-        td.classList.add("score-cell");
-        td.dataset.state = 0;
-        td.addEventListener("click", () => {
-          let next = (parseInt(td.dataset.state) + 1) % symbols.length;
-          td.dataset.state = next;
-          td.textContent = symbols[next];
-        });
-        tr.appendChild(td);
-      }
-      return tr;
+    for (let i = 0; i < 4; i++) {
+      const td = document.createElement("td");
+      td.classList.add("score-cell");
+      td.dataset.state = 0;
+      td.addEventListener("click", () => {
+        let playerIndex = Array.from(td.parentElement.children).indexOf(td) - 1;
+        let rowLabel = td.parentElement.firstChild.textContent;
+        let numberValue = rowLabel === "Bull" ? 25 : parseInt(rowLabel);
+
+        let previous = parseInt(td.dataset.state);
+        let next = previous + 1;
+        if (next > 3) next = 3;
+        td.dataset.state = next;
+        td.textContent = symbols[next];
+
+        if (previous === 3) {
+          for (let j = 0; j < 4; j++) {
+            if (j !== playerIndex) {
+              const opponentTd = td.parentElement.children[j + 1];
+              if (parseInt(opponentTd.dataset.state) < 3) {
+                playerScores[j] += numberValue;
+              }
+            }
+          }
+          updateScoreDisplay();
+        }
+      });
+      tr.appendChild(td);
     }
 
-    function populateBoard() {
-      scoreTable.innerHTML = "";
-      for (let row of rows) {
-        const tr = createRow(row);
-        scoreTable.appendChild(tr);
-      }
-    }
-
-    function resetGame() {
-      populateBoard();
-    }
-
-    function confirmReset() {
-      const confirmed = confirm("Do you really want to start a new game? This will clear all scores.");
-      if (confirmed) {
-        resetGame();
-      }
-    }
-
-    populateBoard();
-
-    // Register service worker
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('service-worker.js')
-        .then(reg => console.log('Service Worker Registered'))
-        .catch(err => console.warn('Service Worker Failed', err));
-    }
-
-    let showingQR = false;
-    
-    function toggleQR() {
-  const logo = document.getElementById('logoImage');
-  const overlay = document.getElementById('qrOverlay');
-
-  if (!showingQR) {
-    logo.src = './khonscricket-qr.png';
-    overlay.style.display = 'flex'; // only show overlay on QR reveal
-    setTimeout(() => {
-      overlay.style.display = 'none';
-    }, 3000);
-  } else {
-    logo.src = './flyingpiglogo.png';
-    overlay.style.display = 'none'; // ensure overlay stays hidden when toggling back
+    return tr;
   }
-  showingQR = !showingQR;
-}
-  </script>
+
+  function populateBoard() {
+    scoreTable.innerHTML = "";
+    for (let row of rows) {
+      const tr = createRow(row);
+      scoreTable.appendChild(tr);
+    }
+  }
+
+  function resetGame() {
+    populateBoard();
+    playerScores = [0, 0, 0, 0];
+    updateScoreDisplay();
+  }
+
+  function confirmReset() {
+    const confirmed = confirm("Do you really want to start a new game? This will clear all scores.");
+    if (confirmed) {
+      resetGame();
+    }
+  }
+
+  function updateScoreDisplay() {
+    for (let i = 0; i < 4; i++) {
+      document.getElementById(`score${i}`).textContent = `P${i + 1}: ${playerScores[i]}`;
+    }
+  }
+
+  // QR toggle logic
+  let showingQR = false;
+  function toggleQR() {
+    const logo = document.getElementById('logoImage');
+    const overlay = document.getElementById('qrOverlay');
+
+    if (!showingQR) {
+      logo.src = './khonscricket-qr.png';
+      overlay.style.display = 'flex';
+      setTimeout(() => {
+        overlay.style.display = 'none';
+      }, 3000);
+    } else {
+      logo.src = './flyingpiglogo.png';
+      overlay.style.display = 'none';
+    }
+    showingQR = !showingQR;
+  }
+
+  // Initialize
+  populateBoard();
+
+  // Register service worker
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('service-worker.js')
+      .then(reg => console.log('Service Worker Registered'))
+      .catch(err => console.warn('Service Worker Failed', err));
+  }
+</script>
 </body>
 </html>
